@@ -21,3 +21,4 @@ analyse their apparent influence on the game.": Analyse game mode (blitz, rapid 
 
 - git test
 - git test 2
+- git test 3
