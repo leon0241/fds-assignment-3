@@ -25,7 +25,6 @@ analyse their apparent influence on the game.": Analyse game mode (blitz, rapid 
 - en passant
 - castle
 - promotion
-<<<<<<< Updated upstream
 - capture a queen
 - (fork, pin etc) is_pinned()
 
@@ -33,6 +32,3 @@ analyse their apparent influence on the game.": Analyse game mode (blitz, rapid 
 in a game affect likelihood of winning
 
 - Follow up: Is it possible to predict ELO based on which significant moves are used and when?
-=======
-- large blunder (stockfish down 50%)
->>>>>>> Stashed changes
