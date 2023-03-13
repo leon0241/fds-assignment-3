@@ -26,3 +26,9 @@ analyse their apparent influence on the game.": Analyse game mode (blitz, rapid 
 - castle
 - promotion
 - capture a queen
+- (fork, pin etc) is_pinned()
+
+- Does using a significant move affect likelihood of winning/ does number of significant moves
+in a game affect likelihood of winning
+
+- Follow up: Is it possible to predict ELO based on which significant moves are used and when?
