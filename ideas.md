@@ -1,5 +1,6 @@
 ### Chess
 - en passant and percentages of wins (meme idea)
+
     = Can en passant move at any point in the game predict whether player is more likely to win
     Follow up Q: Predicting ELO from whether en passant moves were taken where possible???
         Predicting whether en passant move will be chosen where possible based on board position AND ELO
@@ -18,3 +19,10 @@ analyse their apparent influence on the game.": Analyse game mode (blitz, rapid 
 | - | - | - | - | - | - | - | - | - | - |
 
 ### Movie
+
+
+###### Significant moves
+- en passant
+- castle
+- promotion
+- capture a queen
