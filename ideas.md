@@ -18,7 +18,3 @@ analyse their apparent influence on the game.": Analyse game mode (blitz, rapid 
 | - | - | - | - | - | - | - | - | - | - |
 
 ### Movie
-
-- git test
-- git test 2
-- git test 3
