@@ -32,3 +32,17 @@ analyse their apparent influence on the game.": Analyse game mode (blitz, rapid 
 in a game affect likelihood of winning
 
 - Follow up: Is it possible to predict ELO based on which significant moves are used and when?
+
+###### En passant as a follow up Q
+
+- Does a player's ELO predict whether they're more likely to win?
+
+- FOllow up: Is it possible to predict ELO based on the context of a potential en passant move?
+
+    Things that count as context:
+    - Does it put you in a significantly better/worse board position
+    - Does it barely affect board position
+    - Did the player take a significantly short/long amount of time to en passant when available
+    - 
+
+    Could look at whether each time en passant is taken does it actually put you in a better position or are ppl taking it for the sake of e.p., or are ppl not taking e.p. cos they don't wanna be in a worse position, or are they not taking it cos they don't know it's a thing - and can we use this to predict ELO?
