@@ -15,16 +15,38 @@
 
 
 
+
+## .
 ## Q1 Does the player with a higher ELO have a higher chance of winning a game against someone with a lower ELO?
-### Linear regression (s2 w6)
+## .
+
+
+### Determine answer for question: Logistic regression:
+Find association between continuous predictor (ELO) and binary outcome (win/loss).
+
+Don't include draws.
+
+Determine the decision boundary (threshold for a win/loss).
+
+If logistic regression doesn't work, look into k-nearest neighbours.
+
+Use principle of max likelihood to get best estimates for logistic regression?
+
+### Determine answer for question: Odds ratios
+Graph, contingency tables for odds ratio.
+
+### Evaluate confidence of our findings: Hypothesis testing (s2 w1)
+p-values
+
+### Evaluate confidence and uncertainty for our findings: Linear regression (s2 w6)
 Answers the questions:
 - What is our confidence in the regression coefficients?
 - Do they represent a real effect and not just a chance or correlation in data?
 - Can we quantify uncertainty?
 
-
-
+## .
 ## Q2 Is it possible to predict ELO based on the context of a potential en passant move?
+## .
 
 ### Building our prediction model: Unsupervised learning
 
@@ -70,6 +92,8 @@ Answers the questions:
 Shows that the slope of the regression model is significantly different from 0.
 
 Can also do a T-test and p-value for this.
+
+p-values indicate how incompatible the data are with a specified statistical model. Can talk about confidence intervals with this.
 
 Prediction uncertainty for comparing predicted ELO of player to actual ELO.
 For this we could also use principle of maximum likelihood: adjust the model coefficients so as to maximise likelihood that observed data arises from the model.
