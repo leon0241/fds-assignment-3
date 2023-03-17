@@ -27,6 +27,7 @@ Answers the questions:
 ## Q2 Is it possible to predict ELO based on the context of a potential en passant move?
 
 ### Building our prediction model: Unsupervised learning
+
 We wish to predict ELO on basis of the variables:
 - (Assuming player is making the ep capture): 
     - Whether ep was taken where opportunity arose
@@ -35,7 +36,25 @@ We wish to predict ELO on basis of the variables:
     - Colour
     - If it gives an advantage
 
-#### Training and Testing set
+###### PCA
+Before clustering, apply PCA to reduce dimensionality.
+
+###### Scree plot
+Use this to find the number of desired clusters for K-Means.
+
+Plot mean squared error against the number of clusters k and look for an elbow.
+
+###### Clustering: Partitional K-Means
+
+Divide set of D-dimensional unlabelled data points into k clusters (k was found earlier using a scree plot).
+
+Represent each cluster by a single prototype (centre of cluster).
+
+Look into vector quantisation?
+
+Compare different clustering combinations with a mean squared error function?
+
+###### Training and Testing set
 (See FDS CW2 Paintings report for info on the ratio to split the training and testing data.)
 (Lila Check what the equivalent for unspurervised learning is. Rn this paragraph is info for a supervised learning set.)
 Training set = Players with known data
