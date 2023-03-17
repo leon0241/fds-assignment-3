@@ -26,7 +26,20 @@ Answers the questions:
 
 ## Q2 Is it possible to predict ELO based on the context of a potential en passant move?
 
-### Building our prediction model:
+### Building our prediction model: Unsupervised learning
+We wish to predict ELO on basis of the variables:
+- (Assuming player is making the ep capture): 
+    - Whether ep was taken where opportunity arose
+    - Time taken to respond to taking the ep
+    - Time taken to make ep capture
+    - Colour
+    - If it gives an advantage
+
+#### Training and Testing set
+(See FDS CW2 Paintings report for info on the ratio to split the training and testing data.)
+(Lila Check what the equivalent for unspurervised learning is. Rn this paragraph is info for a supervised learning set.)
+Training set = Players with known data
+Test set = 'Unknown ELO' - it is the job of a classifier to predict a label for each test item.
 
 ### Evaluating our prediction model: Linear regression (s2 w6)
 Answers the questions:
