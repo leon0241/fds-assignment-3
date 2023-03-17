@@ -35,7 +35,7 @@ in a game affect likelihood of winning
 
 ###### En passant as a follow up Q
 
-- Does a player's ELO predict whether they're more likely to win?
+- Does a player's ELO **gap** between another player predict whether they're more likely to win?
 
 - FOllow up: Is it possible to predict ELO based on the context of a potential en passant move?
 
