@@ -67,21 +67,27 @@
 \section{Overview}
 % 250 words maximum
 
+Visulaistations of ...
+Statistical techniques used ...
+
 \section{Introduction}
 % Suggested 400 words
 
 \paragraph{Context and motivation}
 
-What is the area of this data science study, and why is it interesting
-to investigate?
+Online chess has become increasingly popular, with website Chess.com hosting an average of x [Lila find and cite] games every day. Users may play with friends or strangers, and a wide variety of chess variants and time-controls are available to play with. It's rise in popularity follows the increase in free time during the COVID-19 pandemic lockdowns, popularity of Netflix's show 'The Queen's Gambit', and world-ranking players streaming the game on Twitch \cite{The2020ChessBoom} With a sudden increase in online players comes an increase in publicly available game data. This provides opportunity for investigation into player's strengths, measured by ELO (a number corresponding to skill level).
+
+[Lila where? to put this bit:]
+
+This report studies a dataset of 60,000 games, analysing the impact a difference in ELO (score related to playing ability in chess) makes on the outcome of a game. We also consider whether ELO may be predicted from a player's response to an 'en passant' move.
 
 \paragraph{Previous work}
 
 Brief description of any previous work in this area (e.g., in the
 media, or scientific literature or blogs).
 
-E.g. Recent surveys show that most students prefer final projects to
-final exams \cite{Space2021}.
+An article in the literature found [Lila put what it found] about the ELO \cite{HowMuchDoesEloMatter}.
+There is no literature directly studying the relationship between a player's response to 'en passant' moves and their ELO.
 
 \paragraph{Objectives}
 
@@ -90,15 +96,22 @@ What questions are you setting out to answer?
 \section{Data}
 % Suggested 300 words
 
-\paragraph{Data provenance} Who created the dataset(s)?  How you have
-obtained it (e.g., file or web scraping), and do the T\&Cs allow you
-to use obtain the data for the project?
+% Who created the dataset(s)?  How you have
+% obtained it (e.g., file or web scraping), and do the T\&Cs allow you
+% to use obtain the data for the project?
 
-\paragraph{Data description} Description of the data, e.g. variables
-in each table, number of records.
+\paragraph{Data provenance}
+We obtained our data from Kaggle.com \cite{Kaggle}, where they provided a dataset of over 60,000 games of chess taken from Chess.com. The terms and conditions on Chess.com state that you are not allowed to datamine, but in this case the dataset was extracted using the Chess.com API so it complies with their regulations.
 
-\paragraph{Data processing} How you have processed the dataset, e.g.,
-cleaning, removing missing values, joining tables.
+% Description of the data, e.g. variables
+% in each table, number of records.
+\paragraph{Data description}
+The dataset records 66879 games of chess that took place on Chess.com with varying game modes, time classes, and levels of players. The data is all in one database but the columns are effectively split up into two sections. The first are the main columns, while the final column is the PGN. The main columns include basic data i.e. the usernames and links of players, the ELO ratings of each player, the result of both players, the time control and time class, the rules the game was played on, and the final board state. On the other hand, the PGN (Portable Game Notation) is a column in a standard format to be easily read by other chess analyzers. Thus it has a lot of the same information the previous fields do, but it also includes important information like the opening moves, and especially the last field which is a list of all the moves that took place during that game. Using the PGN we can simulate and replay exactly how the game was played, and analyse using that.
+
+% How you have processed the dataset, e.g.,
+% cleaning, removing missing values, joining tables.
+\paragraph{Data processing}
+The data was well set out, so it did not need much cleaning in terms of removing invalid entries or N/A values. However, since the dataset includes lots of different modes of games, some which are not standard chess, we removed them since they wouldn't be an accurate representation of an average chess game. One example of a chess variation is Chess960, where the positions of the 
 
 \section{Exploration and  analysis}
 % Suggested 500 words for individual report; proportionately longer
@@ -172,7 +185,7 @@ reference it for a particular claim in the list of references on the
 Wikipedia page, read it, and cite it.
 
 The golden rule is always to cite information that has come from other
-sources, to avoid plagiarism \cite{wiki:plagarism}.
+sources, to avoid plagiarism \cite{wiki:plagarism}. \cite{HowMuchDoesEloMatter}
 
 \paragraph{Improvements and extensions}
 
