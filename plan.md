@@ -47,8 +47,7 @@ Only require games which involve a potential ep
 We wish to predict ELO on basis of the variables:
 - (Assuming player is making the ep capture): 
     - Whether ep was taken where opportunity arose
-    - Time taken to respond to taking the ep
-    - Time taken to make ep capture
+    - Time taken to take/respond to taking the ep capture
     - Colour
     - If it gives an advantage
 ### .
