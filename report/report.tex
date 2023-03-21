@@ -88,10 +88,10 @@ media, or scientific literature or blogs).
 
 An article in the literature found [Lila put what it found] about the ELO \cite{HowMuchDoesEloMatter}.
 There is no literature directly studying the relationship between a player's response to 'en passant' moves and their ELO.
-
 \paragraph{Objectives}
 
-What questions are you setting out to answer?
+% What questions are you setting out to answer?
+Commonly, chess tactics are a way to gain an inherent advantage in the game state. Thus, a highly ranked chess player could plan ahead several moves just to obtain this state. Common tactics are ones that most players that are somewhat into chess will recognise as an advantageous move, but being able to consistently plan to apply the knowledge is what separates a good chess player from a great one. However, one exception to this is the move \textit{en-passant}. This is a far more situational tactic, and heavily relies on your opponent to move a certain way for a player to be able to utilise it. More importantly, often it does not leave the board in an advantageous state for the moving player. Due to this, compared to most other chess tactics, generally using en-passant will not be the optimal move. Therefore, if you are highly ranked and playing to win, chances are that you would not take it given the chance. However, in the chess scene, and especially in online chess which is where this dataset is sourced from, the move has gained a cult-like following. Since most people that are active in the online chess scene will be lower elo, we can use this fact to try and predict the elo of an individual player based on the chance they will take an en-passant, since we can assume that the higher the elo you are, the less likely to take it
 
 \section{Data}
 % Suggested 300 words
@@ -120,12 +120,12 @@ The data was well set out, so it did not need much cleaning in terms of removing
 % 't' means "try to position at the top of the page"
 \begin{figure}[t]
   \centering
-  \includegraphics{example1}
+  \includegraphics{report/images/log_regression.png}
   \caption{Demonstration figure. This caption explains more about the
     figure. Note that the font size of the labels in the plot is 9pt,
     which is obtained by the settings as shown in the Jupyter
     notebook.}
-  \label{fds-project-template:fig:example1}
+  \label{fds-project-template:fig:log_regression}
 \end{figure}
 
 % 'b' means "try to position at the bottom of the page"
@@ -152,8 +152,8 @@ The data was well set out, so it did not need much cleaning in terms of removing
 A data science analysis of the paper, including: 
 \begin{itemize}
 \item Visualisations (for example
-  Figure~\ref{fds-project-template:fig:example1}) and tables (for
-  example Table~\ref{tab:example1}). Please make sure that all figures
+  Figure~\ref{fds-project-template:fig:log_regression}) and tables (for
+  example Table~\ref{tab:log_regression}). Please make sure that all figures
   and tables are referred to in the text, as demonstrated in this
   bullet point.
 \item Interpretation of the results 
