@@ -1,0 +1,5 @@
+pgntext = "1. d4 d5 2. e3 c6 3. c4 dxc4 4. Bxc4 b5 5. Bb3 a5 6. Qf3 Bb7 7. Bxf7+ Kd7 8. Qf5+ Kc7 9. Nf3 Nh6 10. Qe5+ Kb6 11. a4 bxa4 12. Nc3 Ng4 13. Nxa4+ Ka6 14. Bc4+ Ka7 15. Qc5+ 1-0"
+
+pgn_en = "1. e4 h5 2. e5 f5 3. exf6 b5"
+
+pgn_en2 = "1. d4 h5 2. d5 e5 3. h3"
