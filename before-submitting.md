@@ -4,6 +4,7 @@
 - Remove all tests
 - Sort font sizes in figures. Axis labels can't be too small
 - Legend on log reg graph to show what the blue points are, and what the red line is
+- Test and training set for logistic regression? See Statology page on log reg for info
 
 
 
