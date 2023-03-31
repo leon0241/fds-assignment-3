@@ -67,7 +67,7 @@
 \section{Overview}
 % 250 words maximum
 
-Visulaistations of ...
+Visualisations of ...
 Statistical techniques used ...
 
 \section{Introduction}
@@ -101,17 +101,18 @@ Commonly, chess tactics are a way to gain an inherent advantage in the game stat
 % to use obtain the data for the project?
 
 \paragraph{Data provenance}
-We obtained our data from Kaggle.com \cite{Kaggle}, where they provided a dataset of over 60,000 games of chess taken from Chess.com. The terms and conditions on Chess.com state that you are not allowed to datamine, but in this case the dataset was extracted using the Chess.com API so it complies with their regulations.
+We obtained our data from Kaggle.com \cite{Kaggle}, where they provided a dataset of over 60,000 games of chess taken from Chess.com. The terms and conditions on Chess.com state that you are not allowed to datamine[todo: cite chess.com t\&c], but in this case the dataset was extracted using the Chess.com API so it complies with their regulations.
 
 % Description of the data, e.g. variables
 % in each table, number of records.
 \paragraph{Data description}
-The dataset records 66879 games of chess that took place on Chess.com with varying game modes, time classes, and levels of players. The data is all in one database but the columns are effectively split up into two sections. The first are the main columns, while the final column is the PGN. The main columns include basic data i.e. the usernames and links of players, the ELO ratings of each player, the result of both players, the time control and time class, the rules the game was played on, and the final board state. On the other hand, the PGN (Portable Game Notation) is a column in a standard format to be easily read by other chess analyzers. Thus it has a lot of the same information the previous fields do, but it also includes important information like the opening moves, and especially the last field which is a list of all the moves that took place during that game. Using the PGN we can simulate and replay exactly how the game was played, and analyse using that.
+The dataset records 66879 games of chess that took place on Chess.com with varying game modes, time classes, and levels of players. The data is all in one file but the columns are effectively split up into two sections. The first are the main columns, while the final column is the PGN. The main columns include basic data i.e. the usernames and links of players, the ELO ratings of each player, the result of both players, the time control and time class, the rules the game was played on, and the final board state. On the other hand, the PGN (Portable Game Notation) is a column in a standard format to be easily read by other chess analysers. Thus it has a lot of the same information the previous fields do, but it also includes important information like the opening moves, and especially the last field which is a list of all the moves that took place during that game. Using the PGN we can simulate and replay exactly how the game was played, and analyse using that.
 
 % How you have processed the dataset, e.g.,
 % cleaning, removing missing values, joining tables.
 \paragraph{Data processing}
-The data was well set out, so it did not need much cleaning in terms of removing invalid entries or N/A values. However, since the dataset includes lots of different modes of games, some which are not standard chess, we removed them since they wouldn't be an accurate representation of an average chess game. One example of a chess variation is Chess960, where the positions of the 
+The data was well set out, so it did not need much cleaning in terms of removing invalid entries or N/A values. However, since the dataset includes lots of different modes of games, some which are not standard chess, we removed them since they wouldn't be an accurate representation of an average chess game. One example of a chess variation is Chess960, where the starting positions of the pieces are randomised.
+We also removed games where the game terminated early - either from timeout, resignation or other means. We used two filters, the first being to read the top row of the end-board, and if the pieces are laid out in the order "RNBKQBNR", that's an indicator that the game has not developed much since all the important pieces are in their starting place. Our second method was to filter out any games with less than 10 total moves (or 5 per player). We concluded that any games in these two categories would not be useful to the data analysis.
 
 \section{Exploration and  analysis}
 % Suggested 500 words for individual report; proportionately longer
@@ -121,46 +122,19 @@ The data was well set out, so it did not need much cleaning in terms of removing
 \begin{figure}[t]
   \centering
   \includegraphics{report/images/log_regression.png}
-  \caption{Demonstration figure. This caption explains more about the
-    figure. Note that the font size of the labels in the plot is 9pt,
-    which is obtained by the settings as shown in the Jupyter
-    notebook.}
+  \caption{Each datapoint represents how many ELO points a player is than their opponent during a game, and whether they won (1) or lost (0). The standard logistic function is plotted in red.
+  Demonstration figure. This caption explains more about the figure. Note that the font size of the labels in the plot is 9pt, which is obtained by the settings as shown in the Jupyter notebook.}
   \label{fds-project-template:fig:log_regression}
 \end{figure}
 
 % 'b' means "try to position at the bottom of the page"
-\begin{table}[b]
-  \centering
-  \caption{Excerpt from Scottish Index of Multiple Deprivation, 2016 edition.
-    \url{https://simd.scot}. You may put more information in the caption.}
-  \label{tab:example1}
-\begin{tabular}{lrrrrrrr}
-\hline\hline
-\textbf{Location}&\textbf{Employ-}&\textbf{Illness}&\textbf{Attain-}&\textbf{Drive}  &\textbf{Drive}    &\textbf{Crime}&\dots\\
-                 &\textbf{ment}   &                &\textbf{ment}   &\textbf{Primary}&\textbf{Secondary}&              &\\
-\hline
-\textbf{Macduff}&$10$&$ 95$&$5.3$&$1.5$&$6.6$&$249$&\dots\tabularnewline
-\textbf{Kemnay}&$ 3$&$ 40$&$5.3$&$2.4$&$2.4$&$168$&\dots\tabularnewline
-\textbf{Hilton}&$ 0$&$ 10$&$6.3$&$2.2$&$3.0$&$144$&\dots\tabularnewline
-\textbf{Ruchill}&$ 8$&$130$&$4.9$&$1.7$&$5.6$&$318$&\dots\tabularnewline
-\textbf{Belmont}&$ 2$&$ 50$&$6.1$&$3.1$&$3.2$&$129$&\dots\tabularnewline
-\dots&\dots&\dots&\dots&\dots&\dots&\dots&\dots\tabularnewline
-\hline
-\end{tabular}
-\end{table}
 
-A data science analysis of the paper, including: 
-\begin{itemize}
-\item Visualisations (for example
-  Figure~\ref{fds-project-template:fig:log_regression}) and tables (for
-  example Table~\ref{tab:log_regression}). Please make sure that all figures
-  and tables are referred to in the text, as demonstrated in this
-  bullet point.
-\item Interpretation of the results 
-\item Description of how you have applied one ore more of the
-  statistical and ML methods learned in the FDS to the data
-\item Interpretation of the findings 
-\end{itemize}
+\paragraph{Data Analysis}
+We used logistic regression to investigate the association between the difference in player's ELO (a continuous predictor) and winning (a binary outcome, since draws or other indeterminate end-states are excluded).
+A stratified sample of the dataset was made, proportionally sampling by 'time class' ('daily', 'rapid', 'blitz', 'bullet').
+We found $\beta_{0}$ and $\beta_{1}$ to be $0.07679$ and $0.01028$ (5dp) respectively, thus can calculate the probability of a win is $\displaystyle\frac{1}{1+e^{\beta^{0}}}$.
+
+
 
 You can use equations like this:
 \begin{equation}
