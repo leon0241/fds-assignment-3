@@ -1,6 +1,13 @@
 import pandas as pd
 import re
 
+def remove_time_inc(df_row):
+    reg = re.search("[0-9]*(?=\+)", df_row["time_control"])
+    if reg != None:
+        df_row["time_control"] = reg.group()
+        # print(df_row["time_control"])
+    return df_row
+
 def import_data():
     '''
     Imports chess CSV file, cleans data, and returns an output pandas dataframe
@@ -18,6 +25,10 @@ def import_data():
     # filter out alternative rules like chess960 etc
     chess_data = chess_data[chess_data['rules'] == "chess"]
     # remove any game that starts with rnbqkbnr cos that shows the game barely developed
+    chess_data = chess_data[chess_data['time_class'] != "daily"]
+    
+    
+    chess_data = chess_data.apply(remove_time_inc, axis=1)
 
     chess_data = chess_data[~(chess_data['white_result'] == chess_data['black_result'])]
 
@@ -55,4 +66,6 @@ def import_data():
     for drop_id in drops:
         chess_data = chess_data.drop(drop_id)
     chess_data = chess_data.reset_index(drop=True)
+    
     return chess_data
+
