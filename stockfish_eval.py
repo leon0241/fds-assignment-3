@@ -114,11 +114,9 @@ class StockfishEval:
     
     def check_adj_piece(self, square):
         '''Checks if a piece on a square is an opponent pawn'''
-        print(square)
         piece = self.fish.get_what_is_on_square(square)
         print(piece)
         print(self.pawn_piece)
-        print(piece == self.pawn_piece)
         return True if piece == self.pawn_piece else False
     
     def get_abs_advantage(self, post, pre):
@@ -140,22 +138,7 @@ class StockfishEval:
         '''
 
         best_move = self.fish.get_best_move()
-        
         self.move_list["best_move"] = best_move
-        
-        # # if the best move is en-passant
-        # ep_best = False
-        # if self.fish.will_move_be_a_capture(best_move) == self.fish.Capture.EN_PASSANT:
-        #     ep_best = True
-        
-        # # play best move and measure evaluation
-        # self.fish.make_moves_from_current_position([best_move])
-        # post_eval = self.fish.get_evaluation()
-        
-        # # get difference of best move against the previous evaluation
-        # post_eval_best_diff = get_abs_advantage(post_eval["value"], pre_eval["value"], col)
-
-        # return [post_eval_best_diff, ep_best]
            
     def find_adj_squares(self):
         '''
@@ -190,7 +173,7 @@ class StockfishEval:
         if (not self.bounds["left"]) and (not self.bounds["right"]):
             self.valid_ep["left"] = self.check_adj_piece(self.squares["left"])
             self.valid_ep["right"] = self.check_adj_piece(self.squares["right"])
-            print(self.valid_ep)
+            print(self.check_adj_piece(self.squares["left"]))
         # if pawn is on A file (leftmost)
         elif self.bounds["left"]:
             # check right only
@@ -200,12 +183,11 @@ class StockfishEval:
         elif self.bounds["right"]:
             # check left only
             self.valid_ep["left"] = self.check_adj_piece(self.squares["left"])
-        print(self.fish.get_board_visual())
-        print(self.bounds)
-        print(self.squares)
-        print(self.valid_ep)
     
     def find_ep_moves(self):
+        print(self.fish.get_board_visual())
+        print(self.squares)
+        print(self.valid_ep)
         if self.valid_ep["left"] and self.valid_ep["right"]:
             # concat a valid en passant move
             move_left = [
