@@ -115,8 +115,6 @@ class StockfishEval:
     def check_adj_piece(self, square):
         '''Checks if a piece on a square is an opponent pawn'''
         piece = self.fish.get_what_is_on_square(square)
-        print(piece)
-        print(self.pawn_piece)
         return True if piece == self.pawn_piece else False
     
     def get_abs_advantage(self, post, pre):
@@ -173,7 +171,6 @@ class StockfishEval:
         if (not self.bounds["left"]) and (not self.bounds["right"]):
             self.valid_ep["left"] = self.check_adj_piece(self.squares["left"])
             self.valid_ep["right"] = self.check_adj_piece(self.squares["right"])
-            print(self.check_adj_piece(self.squares["left"]))
         # if pawn is on A file (leftmost)
         elif self.bounds["left"]:
             # check right only
@@ -185,9 +182,6 @@ class StockfishEval:
             self.valid_ep["left"] = self.check_adj_piece(self.squares["left"])
     
     def find_ep_moves(self):
-        print(self.fish.get_board_visual())
-        print(self.squares)
-        print(self.valid_ep)
         if self.valid_ep["left"] and self.valid_ep["right"]:
             # concat a valid en passant move
             move_left = [
