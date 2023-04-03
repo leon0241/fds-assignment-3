@@ -1,9 +1,11 @@
 class StockfishEval:
-    def __init__(self, stockfish, board, colour):
+    def __init__(self, stockfish, input_board, colour):
         self.fish = stockfish
-        self.board = board.fen()
+        self.board = input_board
+        self.board_fen = input_board.fen()
         self.col = colour
-        self.last_move = str(self.board.peek())
+        self.last_move = str(input_board.peek())
+        self.resulting_row = "6" if self.col == "White" else "3"
         
         self.squares = {
             "left": "",
@@ -33,8 +35,14 @@ class StockfishEval:
             "ep_move_right": ""
         }
     
+    def set_player_move(self, move):
+        self.move_list["player_move"] = move
+    
+    def get_movelist(self):
+        return self.move_list
+    
     def evaluate_board(self):
-        return this.fish.get_evaluation()
+        return self.fish.get_evaluation()
     
     def evaluate_move(self, move):
         self.reset_fen()
@@ -45,12 +53,27 @@ class StockfishEval:
     
     def evaluate_en_passants(self):
         if self.valid_ep["left"] and self.valid_ep["right"]:
-            left_eval = self.evaluate_move(self.move_list["ep_move_left"])
-            right_eval = self.evaluate_move(self.move_list["ep_move_right"])
+            try:
+                left_eval = self.evaluate_move(self.move_list["ep_move_left"])
+            except:
+                left_eval = None
+            
+            try:
+                right_eval = self.evaluate_move(self.move_list["ep_move_right"])
+            except:
+                right_eval = None
             
             if self.col == "White":
+                if left_eval == None:
+                    left_eval = -10000
+                elif right_eval == None:
+                    right_eval = -10000
                 return max(left_eval, right_eval)
             else:
+                if left_eval == None:
+                    left_eval = 10000
+                elif right_eval == None:
+                    right_eval = 10000
                 return min(left_eval, right_eval)
             
         elif self.valid_ep["right"]:
@@ -65,6 +88,8 @@ class StockfishEval:
         return self.evaluate_move(self.move_list["player_move"])
         
     def check_move_is_ep(self, move):
+        # print(self.fish.get_board_visual())
+        # print(move)
         move_type = self.fish.will_move_be_a_capture(move)
         ep_type = self.fish.Capture.EN_PASSANT
         if move_type == ep_type:
@@ -85,11 +110,15 @@ class StockfishEval:
         return chr(ord(letter) - 1)
     
     def reset_fen(self):
-        self.fish.set_fen_position(self.board)
+        self.fish.set_fen_position(self.board_fen)
     
     def check_adj_piece(self, square):
         '''Checks if a piece on a square is an opponent pawn'''
+        print(square)
         piece = self.fish.get_what_is_on_square(square)
+        print(piece)
+        print(self.pawn_piece)
+        print(piece == self.pawn_piece)
         return True if piece == self.pawn_piece else False
     
     def get_abs_advantage(self, post, pre):
@@ -132,7 +161,6 @@ class StockfishEval:
         '''
         Returns a tuple of the left and right adjacent squares to a move
         '''
-
         # resulting column in the form "a - g"
         pawn_move_col = self.last_move[-2]
         # resulting row in the form "1 - 8"
@@ -162,7 +190,7 @@ class StockfishEval:
         if (not self.bounds["left"]) and (not self.bounds["right"]):
             self.valid_ep["left"] = self.check_adj_piece(self.squares["left"])
             self.valid_ep["right"] = self.check_adj_piece(self.squares["right"])
-        
+            print(self.valid_ep)
         # if pawn is on A file (leftmost)
         elif self.bounds["left"]:
             # check right only
@@ -172,12 +200,16 @@ class StockfishEval:
         elif self.bounds["right"]:
             # check left only
             self.valid_ep["left"] = self.check_adj_piece(self.squares["left"])
+        print(self.fish.get_board_visual())
+        print(self.bounds)
+        print(self.squares)
+        print(self.valid_ep)
     
     def find_ep_moves(self):
         if self.valid_ep["left"] and self.valid_ep["right"]:
             # concat a valid en passant move
             move_left = [
-                self.decrement_letter(last_move[-2]),
+                self.decrement_letter(self.last_move[-2]),
                 self.last_move[-1],
                 self.last_move[-2],
                 self.resulting_row
@@ -185,7 +217,7 @@ class StockfishEval:
             self.move_list["ep_move_left"] = "".join(move_left)
             
             move_right = [
-                self.increment_letter(last_move[-2]),
+                self.increment_letter(self.last_move[-2]),
                 self.last_move[-1],
                 self.last_move[-2],
                 self.resulting_row
@@ -195,7 +227,7 @@ class StockfishEval:
         # if en passant can only be played from the right
         if self.valid_ep["right"]:
             move_right = [
-                self.increment_letter(last_move[-2]),
+                self.increment_letter(self.last_move[-2]),
                 self.last_move[-1],
                 self.last_move[-2],
                 self.resulting_row
@@ -204,7 +236,7 @@ class StockfishEval:
         # if en passant can only be played from the left
         elif self.valid_ep["left"]:
             move_left = [
-                self.decrement_letter(last_move[-2]),
+                self.decrement_letter(self.last_move[-2]),
                 self.last_move[-1],
                 self.last_move[-2],
                 self.resulting_row
