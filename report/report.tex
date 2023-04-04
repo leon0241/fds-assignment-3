@@ -145,16 +145,22 @@ To find a suitable model to predict ELO based on the context of an en-passant mo
 From these evaluations, we were able to use our results to create a model to predict human behaviour of an en-passant capture. If we assume the best move of a certain board state is the upper limit of a persons choice, then we can think of the likelihood of picking any move as a function that grows exponentially small by some factor, since the likelihood of picking a move that puts you in an advantage, i.e. close to the best move, would be a lot more viable than picking a move that puts you in a large disadvantage, i.e. far from the best move. We will call this the temptation of a move, and is modelled like so:
 $$T(\text{move})= -e^{(E_{\text{best}} - E_{\text{move}})/{n}} + 1$$
 where $n$ is some factor to stop the exponential function from growing too quick. We tested on various different factors, but we didn't find any clear patterns so we settled on $n=220$, which gave the highest peak of $65\%$ accuracy across $1000$ tests, and an average accuracy of $63\%$ across $10,000$ tests.\newline
-After calculating the temptation of every en-passant move, we found the probability that someone in a certain ELO would play an en-passant move. There wasn't enough samples since there is a large range of $2000+$ and only around $5000$ entries, so we rounded each player's ELO to the nearest $10$ and calculated using that. Once we had that, we plotted Temptation against the percent probability of playing an en-passant move. 
+After calculating the temptation of every en-passant move, we found the probability that someone in a certain ELO would play an en-passant move. There wasn't enough samples since there is a large range of $2000+$ and only around $5000$ entries, so we rounded each player's ELO to the nearest $10$ and calculated using that. Once we had that, we plotted temptation against the percent probability of playing an en-passant move. (Fig. \ref{fds-project-template:fig:temptation}).\newline
+From the chart, we can see that higher ELO players have a much higher chance of playing en-passant, but for the most part only when the temptation is high. On the other hand, average ELO players have a more spread out probability chart, but they consider en-passant as a much more viable move even if it puts them in a considerable disadvantage. Low ELO players are similar to average ELO players, but slightly lower which makes sense as some lower ELO players might not know how or when to actually play en-passant.
 
 \begin{figure}[t]
   \centering
-  \includegraphics{report/images/log_regression.png}
-  \caption{Each datapoint represents how many ELO points a player is than their opponent during a game, and whether they won (1) or lost (0). The standard logistic function is plotted in red.
-  Demonstration figure. This caption explains more about the figure. Note that the font size of the labels in the plot is 9pt, which is obtained by the settings as shown in the Jupyter notebook.}
-  \label{fds-project-template:fig:log_regression}
+  \includegraphics{report/images/temptation_chart.png}
+  \caption{descriptive caption that i cba doing rn}
+  \label{fds-project-template:fig:temptation}
 \end{figure}
 
+\begin{figure}[t]
+  \centering
+  \includegraphics{report/images/knn_graph.png}
+  \caption{another descriptive caption that i cba doing rn}
+  \label{fds-project-template:fig:knn}
+\end{figure}
 
 % From k-NN we were unable to find a suitable model to predict ELO based on en passant context. We conducted a K-Means partitional clustering method on the data to further demonstrate that it is unlikely to find a suitable model using specifically these hyperparameters. If after conducting this we find no similar clusters of data at all, then it would be expected that we cannot group data by these hyperparameters, thus we cannot predict ELO from these.
 
