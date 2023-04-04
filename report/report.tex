@@ -3,7 +3,7 @@
 \usepackage[T1]{fontenc}
 %\usepackage{gentium}
 \usepackage{mathptmx} % Use Times Font
-
+\usepackage{amsmath}
 \usepackage{graphicx} % Required for including pictures
 \usepackage{hyperref} % Format links for pdf
 \usepackage{biblatex}
@@ -140,11 +140,26 @@ The logistic regression model was estimated using maximum likelihood, so it seem
 
 
 
-\paragraph{Question 2 - Lila give it a better name}
-From k-NN we were unable to find a suitable model to predict ELO based on en passant context. We conducted a K-Means partitional clustering method on the data to further demonstrate that it is unlikely to find a suitable model using specifically these hyperparameters. If after conducting this we find no similar clusters of data at all, then it would be expected that we cannot group data by these hyperparameters, thus we cannot predict ELO from these.
+\paragraph{Question 2 - Using a model based on temptation of en-passant to predict ELO}
+To find a suitable model to predict ELO based on the context of an en-passant move, we utilised various external libraries to assist our data exploration. Using the \textit{python-chess} library [TODO: cite?], we were able to parse the "pgn" field to obtain information for each game in the dataset. Using these tools, we were first able to filter out the games that included an en-passant opportunity ($n=5074$), along with the games where an en-passant move actually occurred ($n=1563$). We then used \textit{Stockfish}[TODO: cite?], an open source chess game engine, to evaluate how well certain moves perform. Using the board state right before an en-passant opportunity, we were able to obtain how much of an advantage a player would gain from the following moves: a Stockfish calculated best move, the move the player decided to play, and finally the relevant en-passant capture (if both sides have opportunity, then the higher evaluated move is chosen).\newline
+From these evaluations, we were able to use our results to create a model to predict human behaviour of an en-passant capture. If we assume the best move of a certain board state is the upper limit of a persons choice, then we can think of the likelihood of picking any move as a function that grows exponentially small by some factor, since the likelihood of picking a move that puts you in an advantage, i.e. close to the best move, would be a lot more viable than picking a move that puts you in a large disadvantage, i.e. far from the best move. We will call this the temptation of a move, and is modelled like so:
+$$T(\text{move})= -e^{(E_{\text{best}} - E_{\text{move}})/{n}} + 1$$
+where $n$ is some factor to stop the exponential function from growing too quick. We tested on various different factors, but we didn't find any clear patterns so we settled on $n=220$, which gave the highest peak of $65\%$ accuracy across $1000$ tests, and an average accuracy of $63\%$ across $10,000$ tests.\newline
+After calculating the temptation of every en-passant move, we found the probability that someone in a certain ELO would play an en-passant move. There wasn't enough samples since there is a large range of $2000+$ and only around $5000$ entries, so we rounded each player's ELO to the nearest $10$ and calculated using that. Once we had that, we plotted Temptation against the percent probability of playing an en-passant move. 
 
-To find the best number of clusters $k$, we used the elbow method on a scree plot. The scree plot [Lila cite the figure] plotted the standard squared error (SSE) for data point variations in their clusters [Lila double check that's what this is] for values $1 < k <= 25$ suggests points near $k = 8$ are potential 'elbow' point candidates. We chose $k = 8$ as our number of clusters.
-We applied PCA to reduce the dimensionality of 5 hyperparameters before applying the K-Means. Standardised to ensure all variables had the same scale, so K-Means wouldn't be affected by [LILA SEE P11 FAILURE OF K MEANS SECTION IN LECTURE NOTES] The graph of the K-Means shows 8 different clusters, differentiated by colour-vision-deficiency-friendly colours, with the centres of each cluster marked by a black cross. With the exception of group $4$, all clusters overlap significantly. This implies the model is overfitted/underfitted[LILA work out which one and explain better].
+\begin{figure}[t]
+  \centering
+  \includegraphics{report/images/log_regression.png}
+  \caption{Each datapoint represents how many ELO points a player is than their opponent during a game, and whether they won (1) or lost (0). The standard logistic function is plotted in red.
+  Demonstration figure. This caption explains more about the figure. Note that the font size of the labels in the plot is 9pt, which is obtained by the settings as shown in the Jupyter notebook.}
+  \label{fds-project-template:fig:log_regression}
+\end{figure}
+
+
+% From k-NN we were unable to find a suitable model to predict ELO based on en passant context. We conducted a K-Means partitional clustering method on the data to further demonstrate that it is unlikely to find a suitable model using specifically these hyperparameters. If after conducting this we find no similar clusters of data at all, then it would be expected that we cannot group data by these hyperparameters, thus we cannot predict ELO from these.
+
+% To find the best number of clusters $k$, we used the elbow method on a scree plot. The scree plot [Lila cite the figure] plotted the standard squared error (SSE) for data point variations in their clusters [Lila double check that's what this is] for values $1 < k <= 25$ suggests points near $k = 8$ are potential 'elbow' point candidates. We chose $k = 8$ as our number of clusters.
+% We applied PCA to reduce the dimensionality of 5 hyperparameters before applying the K-Means. Standardised to ensure all variables had the same scale, so K-Means wouldn't be affected by [LILA SEE P11 FAILURE OF K MEANS SECTION IN LECTURE NOTES] The graph of the K-Means shows 8 different clusters, differentiated by colour-vision-deficiency-friendly colours, with the centres of each cluster marked by a black cross. With the exception of group $4$, all clusters overlap significantly. This implies the model is overfitted/underfitted[LILA work out which one and explain better].
 
 
 
@@ -172,4 +187,4 @@ sources, to avoid plagiarism \cite{wiki:plagarism}. \cite{HowMuchDoesEloMatter}
 \end{document}
 
 % LocalWords:  lrrrrrrr ment Macduff Kemnay Ruchill FDS mc th fds
-% LocalWords:  Anscombe
+% LocalWords:  Anscombe dataset
