@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[10pt,a4paper,twocolumn]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 %\usepackage{gentium}
@@ -111,7 +111,7 @@ The dataset records 66879 games of chess that took place on Chess.com with varyi
 % How you have processed the dataset, e.g.,
 % cleaning, removing missing values, joining tables.
 \paragraph{Data processing}
-The data was well set out, so it did not need much cleaning in terms of removing invalid entries or N/A values. However, since the dataset includes lots of different modes of games, some which are not standard chess, we removed them since they wouldn't be an accurate representation of an average chess game. One example of a chess variation is Chess960, where the starting positions of the pieces are randomised.
+The data was well set out, so it did not need much cleaning in terms of removing invalid entries or NaN values. However, since the dataset includes lots of different modes of games, some which are not standard chess, we removed them since they wouldn't be an accurate representation of an average chess game. One example of a chess variation is Chess960, where the starting positions of the pieces are randomised.
 We also removed games where the game terminated early - either from timeout, resignation or other means. We used two filters, the first being to read the top row of the end-board, and if the pieces are laid out in the order "RNBKQBNR", that's an indicator that the game has not developed much since all the important pieces are in their starting place. Our second method was to filter out any games with less than 10 total moves (or 5 per player). We concluded that any games in these two categories would not be useful to the data analysis.
 
 \section{Exploration and  analysis}
@@ -131,17 +131,22 @@ We also removed games where the game terminated early - either from timeout, res
 
 \paragraph{Data Analysis}
 We used logistic regression to investigate the association between the difference in player's ELO (a continuous predictor) and winning (a binary outcome, since draws or other indeterminate end-states are excluded).
-A stratified sample of the dataset was made, proportionally sampling by 'time class' ('daily', 'rapid', 'blitz', 'bullet').
-We found $\beta_{0}$ and $\beta_{1}$ to be $0.07679$ and $0.01028$ (5dp) respectively, thus can calculate the probability of a win is $\displaystyle\frac{1}{1+e^{\beta^{0}}}$.
+A stratified sample of the dataset was made, proportionally sampling by 'time class' ('daily', 'rapid', 'blitz', 'bullet'). This resulted in a sample size of $n={something}$, with ELOs ranging from ${something around -2k}$ to ${something around 2k}$.
+
+We found $\beta_{0}$ and $\beta_{1}$ to be $0.07679$ and $0.01028$ (5dp) respectively, thus can calculate the probability of a win for players of the same ELO as $\displaystyle\frac{1}{1+e^{\beta_{0}}} = 0.48081$. This is close to the intuitively expected value of $0.5$, where a win or a loss is equally likely. Since the log odds, $\beta_{0}$, for players with the same ELO is close to $0$ ($0.07679$ logits), then winning and losing are almost equally likely in this case. Furthermore, the odds ratio, $e^{\beta_{0}} = 1.01033$ shows that for every 1 point higher a player is in ELO, they are $1.01033$ times more likely to win.
+
+The logistic regression model was estimated using maximum likelihood, so it seemed most appropriate to use a Wald test to test for a relationship between ELO difference and the probability of a win \cite{WaldTest}. We used the null hypothesis $H_{0}: \beta_{1} = 0$ which states there is no statistically significant relationship, and alternative hypothesis $H_{a}: \beta_{1} \neq 0$ which suggests there is a statistically significant relationship. Following the test procedure outlined by Forthofer, Lee and Hernandez \cite{WaldTest}, and a method to calculate the Wald statistic inspired by StackExchange user j\_sack \cite{StackExchangeWaldTest}, we found a Wald statistic of $75.39460$, which gave a p-value of $p<0.01$. Thus we may reject the null hypothesis at the $1\%$ level, concluding there is insufficient evidence to support there not being a statistically significant relationship between ELO difference and probability of winning.
 
 
 
-You can use equations like this:
-\begin{equation}
-  \label{fds-project-template:eq:1}
-  \overline{x} = \sum_{i=1}^n x_i
-\end{equation}
-or maths inline: $E=mc^2$. However, you do not need to reexplain techniques that you have learned in the course -- assume the reader understands linear regression, logistic regression K-nearest neighbours etc.  Remember to explain any symbols use, e.g.~``$n$ is the number of data points and $x_i$ is the value of the $i$th data point.''.
+
+\paragraph{Question 2 - Lila give it a better name}
+From k-NN we were unable to find a suitable model to predict ELO based on en passant context. We conducted a K-Means partitional clustering method on the data to further demonstrate that it is unlikely to find a suitable model using specifically these hyperparameters. If after conducting this we find no similar clusters of data at all, then it would be expected that we cannot group data by these hyperparameters, thus we cannot predict ELO from these.
+
+To find the best number of clusters $k$, we used the elbow method on a scree plot. The scree plot [Lila cite the figure] plotted the standard squared error (SSE) for data point variations in their clusters [Lila double check that's what this is] for values $1 < k <= 25$ suggests points near $k = 8$ are potential 'elbow' point candidates. We chose $k = 8$ as our number of clusters.
+We applied PCA to reduce the dimensionality of 5 hyperparameters before applying the K-Means. Standardised to ensure all variables had the same scale, so K-Means wouldn't be affected by [LILA SEE P11 FAILURE OF K MEANS SECTION IN LECTURE NOTES] The graph of the K-Means shows 8 different clusters, differentiated by colour-vision-deficiency-friendly colours, with the centres of each cluster marked by a black cross. With the exception of group $4$, all clusters overlap significantly. This implies the model is overfitted/underfitted[LILA work out which one and explain better].
+
+
 
 \section{Discussion and conclusions}
 % Suggested 400 words.
@@ -162,7 +167,6 @@ The golden rule is always to cite information that has come from other
 sources, to avoid plagiarism \cite{wiki:plagarism}. \cite{HowMuchDoesEloMatter}
 
 \paragraph{Improvements and extensions}
-
 
 \printbibliography
 \end{document}
