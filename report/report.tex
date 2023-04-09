@@ -122,13 +122,13 @@ We also removed games where the game terminated early - either from timeout, res
 % for group projects).
 
 % 't' means "try to position at the top of the page"
-\begin{figure}[t]
+\begin{figure*}[t]
   \centering
-  \includegraphics{report/images/log_regression.png}
+  \includegraphics{report/images/log_regression_dual.png}
   \caption{Each datapoint represents how many ELO points a player is than their opponent during a game, and whether they won (1) or lost (0). The standard logistic function is plotted in red.
   Demonstration figure. This caption explains more about the figure. Note that the font size of the labels in the plot is 9pt, which is obtained by the settings as shown in the Jupyter notebook.}
   \label{fds-project-template:fig:log_regression}
-\end{figure}
+\end{figure*}
 
 % 'b' means "try to position at the bottom of the page"
 
@@ -201,6 +201,13 @@ We further produced an ROC [Lila do this and cite figure]
   \caption{another descriptive caption that i cba doing rn}
   \label{fds-project-template:fig:knn}
 \end{figure}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics{report/images/ep_distplot.png}
+  \caption{another descriptive caption that i cba doing rn}
+  \label{fds-project-template:fig:knn}
+\end{figure*}
 
 % From k-NN we were unable to find a suitable model to predict ELO based on en passant context. We conducted a K-Means partitional clustering method on the data to further demonstrate that it is unlikely to find a suitable model using specifically these hyperparameters. If after conducting this we find no similar clusters of data at all, then it would be expected that we cannot group data by these hyperparameters, thus we cannot predict ELO from these.
 
