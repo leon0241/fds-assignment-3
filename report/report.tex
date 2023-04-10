@@ -7,6 +7,7 @@
 \usepackage{float}
 \usepackage{mathptmx} % Use Times Font
 \usepackage{amsmath}
+\usepackage{tabularx}
 \usepackage{amsfonts}
 \usepackage{graphicx} % Required for including pictures
 \usepackage{hyperref} % Format links for pdf
@@ -69,7 +70,7 @@
 %%
 \section{Overview}
 % 250 words maximum
-Online chess sites receive a huge amount of game data from large volumes of users accessing and playing on their sites. Many have large player bases, representing a huge variety in player Elo scores (a number corresponding to skill level). We used data from Chess.com to analyse the relevancy of players' Elo in a chess game. A logistic regression model was used to investigate the effect of the difference in Elo on winning a game. We proposed an exponential function 'Temptation' to be used as a hyperparameter for a predictive model. This model investigated the possibility of predicting Elo from the context of particular game states. We chose to specifically investigate the game states where an 'en passant' move was performed. [Lila Talk about evaluation and results]\newline
+Online chess sites receive a huge amount of game data from large volumes of users accessing and playing on their sites. Many have large player bases, representing a huge variety in player Elo scores (a number corresponding to skill level). We used data from Chess.com to analyse the relevancy of players' Elo in a chess game. A logistic regression model was used to investigate the effect of the difference in Elo on winning a game. Following from this, we attempted to predict a player's Elo using the k-nearest neighbours algorithm. We focused on a specific chess tactic named \textit{en passant} by analysing the context of game states preceding the move, and by utilising an exponential function 'Temptation' to be used as a hyperparameter for a predictive model. [Lila Talk about evaluation and results]\newline
 All decimal values in this report are provided to 4 decimal places.
 
 % Visualisations of ...
@@ -122,7 +123,7 @@ We obtained our data from Kaggle.com \cite{Kaggle}, where they provided a datase
 % Description of the data, e.g. variables
 % in each table, number of records.
 \paragraph{Data description}
-The dataset records $66,879$ games of chess that took place on Chess.com with varying game modes, time classes, and levels of players. Information about each player is provided, i.e. the usernames, Chess.com profiles, and ELO rating during the match. Information about the game is also provided, i.e. the result, information about the time rules, whether it was rated, and the final chess board in a notation called "FEN". The final column is called the PGN (Portable Game Notation) and it is a column in a standard format to be easily read by other chess analysers. The most important part of the PGN is the last field, which is a list of all the moves that took place during that game. Using the PGN we can simulate and replay exactly how the game was played, and provide further analysis.
+The dataset records $66,879$ games of chess that took place on Chess.com with varying game modes, time classes, and levels of players. Information about each player is provided, i.e. the usernames, Chess.com profiles, and Elo rating during the match. Information about the game is also provided, i.e. the result, information about the time rules, whether it was rated, and the final chess board in a notation called "FEN". The final column is called the PGN (Portable Game Notation) - a column in a standard format to be easily read by other chess analysers. Within the PGN, there includes a list of the moves that took place during the game. Using this we can simulate and replay exactly how the game was played, and provide further analysis.
 
 [Lila where? to put this bit:]
 
@@ -131,13 +132,13 @@ This report studies a dataset of 60,000 games, analysing the impact a difference
 % How you have processed the dataset, e.g.,
 % cleaning, removing missing values, joining tables.
 \paragraph{Data processing}
-The data was well set out, so it did not need much cleaning in terms of removing invalid entries or NaN values. However, we removed alternate game modes that were not standard chess. One example of a variation is Chess960, where the starting positions of the pieces are randomised.
+The data was well set out, so it did not need much cleaning in terms of removing invalid entries or NaN values. However, we removed alternate game modes that were not standard chess. One example of a variation is Chess960, where the starting positions of the pieces are randomised. Additionally, we removed games of the 'daily' time class, a special mode where users have three days to play each move. As a result, the resulting PGN is structured in a different format, and since the game mode works very differently from the other time classes, daily games would need to be analysed separately from other modes. Since there was only a small amount of 'daily' games($~9.2\%$ of total games), we removed it from the dataset.\newline
 We also removed games where the game terminated early - either from timeout, resignation or other means. We used two filters, the first reads the top row of the FEN, and if the pieces are laid out in the starting order that indicates the game did not develop much. Our second method was to filter out any games with less than 10 total moves (or 5 per player). We concluded that any games in these two categories would not be useful to the data analysis.
 
-One of the dataset columns was 'time class' which classified games into $4$ categories depending on their maximum allowed length: 'daily', 'rapid', 'blitz' and 'bullet'. However, the dataset contained relatively few 'daily' games which, if we randomly sampled the dataset, may have led to these 'daily' games holding a larger weight, thus not accurately representing the total population of all games in the dataset. Additionally, daily games are in a different format from the rest of the games. This is because there is no global timer for daily games, as it is a game that resets the time
-To reduce these effects we took a stratified sample, proportionally sampling by 'time class'. This resulted in a sample size of $n={something}$, with Elos ranging from ${something around -2k}$ to ${something around 2k}$. \newline
+% One of the dataset columns was 'time class' which classified games into $4$ categories depending on their maximum allowed length: 'daily', 'rapid', 'blitz' and 'bullet'. However, the dataset contained relatively few 'daily' games which, if we randomly sampled the dataset, may have led to these 'daily' games holding a larger weight, thus not accurately representing the total population of all games in the dataset. Additionally, daily games are in a different format from the rest of the games. This is because there is no global timer for daily games, as it is a game that resets the time
+% To reduce these effects we took a stratified sample, proportionally sampling by 'time class'. This resulted in a sample size of $n={something}$, with Elos ranging from ${something around -2k}$ to ${something around 2k}$. \newline
 
-For our second question, we utilised various external libraries. Using the \textit{python-chess} library \cite{python-chess}, we were able to parse the "PGN" field to filter out games that included an en-passant opportunity ($n=5074$), along with games where an en-passant move actually occurred ($n=1563$). We then used \textit{Stockfish}\cite{StockFish}, an open source chess game engine, to evaluate how well certain moves perform. Using the FEN right before an en-passant opportunity, we were able to obtain how much of an advantage a player would gain from the following moves: a Stockfish calculated best move, the move the player decided to play, and finally the relevant en-passant capture (if both sides have opportunity, then the higher evaluated move is chosen). A caveat of using this is that since Stockfish is a program evaluating a board when you run the program, the evaluations will end up being different each time. Although we have found that in most cases the data is similar, sometimes it generates a large variation in the graphs that will be shown below. \newline
+For our second question, we utilised various external libraries. Using the \textit{python-chess} library \cite{python-chess}, we were able to parse the "PGN" field to filter out games that included an en-passant opportunity ($n=5074$), along with games where an en-passant move actually occurred ($n=1563$). We then used \textit{Stockfish}\cite{StockFish}, an open source chess game engine, to evaluate how much of an advantage from an initial board state a player would gain from the following moves: a Stockfish calculated best move, the move the player decided to make, and finally the relevant en-passant capture. A caveat of using this is that since Stockfish is a live engine, without significant processing power it will end up with different results each time it runs. Although we have found that in most cases the data is similar, sometimes it generates a large variation in the graphs that will be shown below. \newline
 \begin{figure*}[p]
   \centering
   \includegraphics[width=\textwidth]{report/images/log_regression_dual.png}
@@ -167,10 +168,8 @@ Figure [Lila] shows the different logistic functions produced for classes of dif
 
 The logistic regression model was estimated using maximum likelihood, so it seemed most appropriate to use a Wald test to test for a relationship between Elo difference and the probability of a win \cite{WaldTest}. We used the null hypothesis $H_{0}: \beta_{1} = 0$ which states there is no statistically significant relationship, and alternative hypothesis $H_{a}: \beta_{1} \neq 0$ which suggests there is a statistically significant relationship. Following the test procedure outlined by Forthofer, Lee and Hernandez \cite{WaldTest}, and a method to calculate the Wald statistic inspired by StackExchange user j\_sack \cite{StackExchangeWaldTest}, we found a Wald statistic of $75.3946$, which gave a p-value of $p<0.01$. Thus we may reject the null hypothesis at the $1\%$ level, concluding there is sufficient evidence to reject the notion that there is not a statistically significant relationship between Elo difference and probability of winning. \newline
 
-
-
 \paragraph{Data Analysis: Question 2 - Using a model based on temptation of en-passant to predict Elo}
-To visualise the choices of players, we first split up our dataset into roughly three equal sized ELO classes. Since the ELO of games were normally distributed, we were able to use the mean and standard deviation to derive these groups. In this case, it ended up being players from $0 - 1000$ Elo, players from $1000 - 1400$ Elo, and players above $1400$ Elo. We then plotted the games where an en-passant capture happened for each Elo class, and plotted the distribution on different levels of temptation(Fig. \ref{fds-project-template:fig:ep_distplot}). The variable "temptation" is something we thought of to estimate how viable a player would find an en-passant move, modelled as such:
+To visualise the choices of players, we first split up our dataset into roughly three equal sized Elo classes. Since the Elo of games were normally distributed, we were able to use the mean and standard deviation to derive these groups. In this case, it ended up being players from $0 - 1000$ Elo, $1000 - 1400$ Elo, and players above $1400$ Elo. We then plotted the games where an en-passant capture happened for each Elo class, and plotted the distribution on different levels of temptation(Fig. \ref{fds-project-template:fig:ep_distplot}). The variable "temptation" is something we thought of to estimate how viable a player would find an en-passant move, modelled as such:
 $$T(\text{move})= -e^{(E_{\text{best}} - E_{\text{move}})/{n}} + 1$$
 This is a very basic model but it ultimately works off the basis that for a player making a move, a very bad evaluated move would be significantly less likely to be chosen than a move close to the best move. For the chart, values with a temptation of $0$ were excluded as the number of games where en-passant did occur were overwhelmingly high across every class.\newline
 
@@ -187,8 +186,7 @@ After plotting this graph, we tried to emulate these results by creating a new f
 $$\mathbb{P}(\text{Elo class}) = \frac{\text{Games with successful e.p. captures}}{\text{Total games with e.p. opportunity}}$$
 
 We then analysed the dataset using PCA to reduce the dimensionality, and then utilised k-nearest neighbours to classify the data using a $60:40$ ratio for the training and test set respectively (Fig. \ref{fds-project-template:fig:knn}). We used this ratio because any wider a difference and the model would overfit/underfit the data [Lila work out which one it is] meaning the confusion matrix wouldn't [Lila finish this]. \newline
-From the chart, the left and right sides are relatively well defined, but the middle has a wider spread of data, which would likely result in the large error rate: there are points from all three categories overlapping, making it difficult to accurately predict the class a data point inside that region would end up in. This is also reflected in Fig. \ref{fds-project-template:fig:ep_distplot}, since there is a large section where the high Elo class is isolated, and also a decent amount of the low Elo class. However, most of the medium Elo games have an overlap with either/both of the other classes, making the resulting isolated class only 
-a small section of the full amount of games in the respective Elo class.\newline
+From the chart, the left and right sides are relatively well defined, but the middle has a wider spread of data, which would likely result in the large error rate: there are points from all three categories overlapping, making it difficult to accurately predict the class a data point inside that region would end up in. This is also reflected in Fig. \ref{fds-project-template:fig:ep_distplot}, since there is a large section where the high Elo class is isolated, and also a decent amount of the low Elo class. However, most of the medium Elo games have an overlap with either/both of the other classes, making the resulting isolated class only a small section of the full amount of games in the respective Elo class.\newline
 
 We created a confusion matrix (displayed as a table in Fig [Lila cite]) detailing the numbers of correct and incorrect predictions of the k-NN model on the test set for each Elo class. 
 
@@ -209,11 +207,11 @@ We further produced an ROC [Lila do this and cite figure]
   \label{tab:confusion_matrix}
     \begin{tabular}{lrrr}
         \toprule
-        \textbf{Location}&\textbf{Predicted 1}&\textbf{Predicted 2}&\textbf{Predicted 3}\\
+        \textbf{Location}&\textbf{Predict 1}&\textbf{Predict 2}&\textbf{Predict 3}\\
         \midrule
-        \textbf{Macduff}&$10$&$ 95$&$5.3$\tabularnewline
-        \textbf{Kemnay}&$ 3$&$ 40$&$5.3$\tabularnewline
-        \textbf{Hilton}&$ 0$&$ 10$&$6.3$\tabularnewline
+        \textbf{smth 1}&$10$&$ 95$&$5.3$\tabularnewline
+        \textbf{smth 2}&$ 3$&$ 40$&$5.3$\tabularnewline
+        \textbf{smth 3}&$ 0$&$ 10$&$6.3$\tabularnewline
         \hline
     \end{tabular}
 \end{table}
