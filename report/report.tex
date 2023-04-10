@@ -230,10 +230,13 @@ We further produced an ROC [Lila do this and cite figure]
 
 
 \paragraph{Summary of findings}
-This study's findings indicate that the amount of difference in Elo between two players affects the outcome of a chess game. By analysing the situational board state whenever an \textit{en passant} chess move was played, we found insufficient evidence that a player's skill level, measured through Elo, was predictable from the context of this one move.
+This study's findings indicate that the amount of difference in Elo between two players affects the outcome of a chess game, for games played on the online chess website Chess.com. 
+
+By focusing on the situational board state whenever an \textit{en passant} chess move was played, we developed a k-NN model to determine whether there was enough information from this context to predict the Elo of the player. However we
+found insufficient evidence that a player's skill level, measured through Elo, was predictable from the context of this one move.
 
 
-games played on the online chess website Chess.com
+
 
 \paragraph{Evaluation of own work: strengths and limitations}
 A caveat of using Stockfish is that since it is a live engine, without utilising significant processing power it will end up with slightly different results each time it runs. Although we have found that in most cases the data is similar, sometimes it generates a large variation in the graphs that will be shown in this study.
