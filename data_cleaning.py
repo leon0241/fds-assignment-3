@@ -2,6 +2,11 @@ import pandas as pd
 import re
 
 def remove_time_inc(df_row):
+    '''
+    Removes the time increment from the time control variable
+    e.g. 600+10 (600 seconds, add 10 seconds per turn) -> 600
+    '''
+    
     reg = re.search("[0-9]*(?=\+)", df_row["time_control"])
     if reg != None:
         df_row["time_control"] = reg.group()
@@ -13,9 +18,7 @@ def import_data():
     Imports chess CSV file, cleans data, and returns an output pandas dataframe
     '''
     
-    # todo: i forgor what the exact file is called, update this
     CHESS_DATA_LOCATION = "data/club_games_data.csv"
-    # MOVIES_DATA_LOCATION = "data/movies.csv"
 
     # load csv into a big dataframe
     chess_data = pd.read_csv(CHESS_DATA_LOCATION)
@@ -27,9 +30,10 @@ def import_data():
     # remove any game that starts with rnbqkbnr cos that shows the game barely developed
     chess_data = chess_data[chess_data['time_class'] != "daily"]
     
-    
+    # remove time increment from time control
     chess_data = chess_data.apply(remove_time_inc, axis=1)
 
+    # only take binary win/loss, i.e. remove entries like draw
     chess_data = chess_data[~(chess_data['white_result'] == chess_data['black_result'])]
 
     # if the game ends with "rnbqkbnr", that indicates a very undeveloped board,
