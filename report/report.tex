@@ -24,7 +24,7 @@
 
 \usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
 
-\title{descriptive title about chess}
+\title{failing to predict en passant :(}
 \author{Leon Lee and Lila Marshman}
 
 \begin{document}
@@ -70,7 +70,7 @@
 %%
 \section{Overview}
 % 250 words maximum
-Online chess sites receive a huge amount of game data from large volumes of users accessing and playing on their sites. Many have large player bases, representing a huge variety in player Elo scores (a number corresponding to skill level). We used data from Chess.com to analyse the relevancy of players' Elo in a chess game. A logistic regression model was used to investigate the effect of the difference in Elo on winning a game. Following from this, we attempted to predict a player's Elo using the k-nearest neighbours algorithm. We focused on a specific chess tactic named \textit{en passant} by analysing the context of game states preceding the move, and by utilising an exponential function 'Temptation' to be used as a hyperparameter for a predictive model. [Lila Talk about evaluation and results]\newline
+Online chess sites receive a huge amount of game data from large volumes of users accessing and playing on their sites. Many have large player bases, representing a huge variety in player Elo scores (a number corresponding to skill level). We used data from games played on the online chess website Chess.com to analyse the relevancy of players' Elo in a chess game. We used a logistic regression model to investigate the effect of the difference in Elo on winning a game. Following from this, by using an exponential function "Temptation", we were able to visualise a player's likelihood of playing a specific chess tactic called \textit{en passant} across three different categories of Elo. We then attempted to predict a player's Elo using the context of said en passant move. By analysing computer generated evaluations of the state of the game preceding the move, and by using Temptation as a hyperparameter for a predictive model, we attempted to utilise PCA and a K-Nearest Neighbour algorithm to classify users into three classes of Elo. To evaluate the model we calculated various metrics (accuracy, precision, recall, F1 score). [Lila Talk about evaluation and results]\newline
 All decimal values in this report are provided to 4 decimal places.
 
 % Visualisations of ...
@@ -138,7 +138,7 @@ For our second investigation, we utilised various external libraries to assist i
   \centering
   \includegraphics[width=\textwidth]{report/images/log_regression_dual.png}
   \caption{Subplot 1: Each datapoint represents how many Elo points a player is than their opponent during a game, and whether they won (1) or lost (0). The standard logistic function is plotted in red. 'Elo mismatch size' is a measure of the number of Elo points a player's opponent is above them. \newline \newline  
-  Subplot 2: Each line represents the logistic function plotted for a particular Elo difference class. Information on the odds ratios for each is provided, calculated from $\exp{\beta_{1}} for each class' regression coefficient \beta_{1}$. The red line shows the overall standard logistic function from subplot 1, to aid slope comparisons for each class.}
+  Subplot 2: Each line represents the logistic function plotted for a particular Elo difference class. Information on the odds ratios for each is provided, calculated from $e^{\beta_{1}}$ for each class' regression coefficient $\beta_{1}$. The red line shows the overall standard logistic function from subplot 1, to aid slope comparisons for each class.}
   \label{fds-project-template:fig:log_regression}
 \end{figure*}
 
@@ -165,11 +165,11 @@ Figure \ref{fds-project-template:fig:log_regression} Subplot 2 shows the differe
 
 The logistic regression model was estimated using maximum likelihood, so it seemed most appropriate to use a Wald test to test for a relationship between Elo difference and the probability of a win \cite{WaldTest}. We used the null hypothesis $H_{0}: \beta_{1} = 0$ which states there is no statistically significant relationship, and alternative hypothesis $H_{a}: \beta_{1} \neq 0$ which suggests there is a statistically significant relationship. Following the test procedure outlined by Forthofer, Lee and Hernandez \cite{WaldTest}, and a method to calculate the Wald statistic inspired by StackExchange user j\_sack \cite{StackExchangeWaldTest}, we found a Wald statistic of $75.3946$, which gave a p-value of $p<0.01$. Thus we may reject the null hypothesis at the $1\%$ level, concluding there is sufficient evidence to reject the notion that there is not a statistically significant relationship between Elo difference and probability of winning. \newline
 
-\paragraph{Data Analysis: Question 2 - Using a model based on temptation of en-passant to predict Elo}
-To represent the different categories of a player's Elo, we ordered Elo by size and divided our dataset into roughly three equal-sized Elo classes. Since player Elos were normally distributed, we used the sample mean ($\bar{X} = 1,240$) and standard deviation ($s = 400$) to derive these Elo classes such that the amount of data classed in each low, medium and high Elo group was in an almost $30:40:30$ ratio. We believed this ratio most effectively balanced the effects of a large standard deviation whilst ensuring there wasn't a huge difference in the amount of data categorised in each class.
-Thus the resulting class boundaries become: $0 - 1000$ Elo, $1001 - 1400$ Elo, and greater than $1400$ Elo. We then plotted the games where an en-passant capture happened for each Elo class, and plotted the distribution on different levels of temptation (Fig. \ref{fds-project-template:fig:ep_distplot}). We defined the function "temptation" to estimate how viable a player would find an en-passant move, modelled as such:
+\paragraph{Data Analysis: Question 2 - Using context of an en-passant move to attempt to predict Elo of a player}
+To represent the different categories of a player's Elo, we ordered Elo by size and divided our dataset into roughly three equal-sized Elo classes. Since player Elos were normally distributed, we used the sample mean ($\bar{X} = 1,240$) and standard deviation ($\sigma = 400$) to derive these Elo classes such that the amount of data classed in each low, medium and high Elo group was in an almost $30:40:30$ ratio. We believed this ratio most effectively balanced the effects of a large standard deviation whilst ensuring there wasn't a huge difference in the amount of data categorised in each class.
+Thus the resulting class boundaries became: $0 - 1000$ Elo, $1001 - 1400$ Elo, and greater than $1401$ Elo. Filtering out games where en-passant capture didn't happen, we plotted the distribution of each class on different levels of temptation (Fig. \ref{fds-project-template:fig:ep_distplot}). We defined the function "temptation" to estimate how viable a player would find an en-passant move, modelled as such:
 $$T(\text{move})= 1 -e^{(E_{\text{best}} - E_{\text{move}})/{n}}$$
-This is a very basic model but it ultimately works off the basis that for a player making a move, a very bad evaluated move would be significantly less likely to be chosen than a move close to the best move.\newline
+This is a very basic model but it ultimately works off the basis that for a player making a move, a very badly evaluated move would be significantly less likely to be chosen than a move close in evaluation to the best move. The number $n$ is a factor to stop the exponential function growing too fast, and no significant value of $n$ proved to be significantly better than others so we chose $n=220$.\newline
 
 \begin{figure*}[t]
   \centering
@@ -178,25 +178,24 @@ This is a very basic model but it ultimately works off the basis that for a play
   \label{fds-project-template:fig:ep_distplot}
 \end{figure*}
 
-After plotting this graph, we tried to emulate these results in reverse by creating a new field for the probability that someone in a certain Elo would play an en-passant move. There wasn't enough samples in the dataset to get any meaningful information from comparing single values, so we rounded each player's Elo to the nearest $10$ and calculated the probability using the following formula:
+After plotting this graph, we tried to emulate these results by creating a new field for the probability that someone in a certain Elo would play an en-passant move. There wasn't enough samples in the dataset to get any meaningful information from comparing single values, so we rounded each player's Elo to the nearest $10$ and calculated the probability using the following formula:
 $$\mathbb{P}(\text{Elo class}) = \frac{\text{Games with successful e.p. captures}}{\text{Total games with e.p. opportunity}}$$
 
-At this point, there are $8$ parameters involved in the data, $4$ of those are categorical, i.e. the player's colour, if en-passant actually happened, if the game was rated, and the time class. The other variables being the time taken, a stockfish evaluation of the player's actual move in the dataset, the probability of someone in their elo class playing en-passant, and finally the temptation. We then analysed the dataset using PCA to reduce the dimensionality, and then utilised k-nearest neighbours to classify the data using a $60:40$ ratio for the training and test set respectively (Fig. \ref{fds-project-template:fig:knn}). We used this ratio because any wider a difference and the model would overfit/underfit the data [Lila work out which one it is] meaning the confusion matrix wouldn't [Lila finish this]. \newline
+At this point, there are $8$ parameters involved in the data, $4$ of those are categorical, i.e. the player's colour, if en-passant actually happened, if the game was rated, and the time class. The other variables being the time taken, a Stockfish evaluation of the player's actual move in the dataset, the probability of someone in their Elo class playing en-passant, and finally the temptation. We then split our dataset in a $60:40$ ratio for the training and test set respectively (Fig. \ref{fds-project-template:fig:knn}). We used this ratio because any wider a difference and the model would overfit/underfit the data [Lila work out which one it is] meaning the confusion matrix wouldn't [Lila finish this]. Using the training set, we performed a PCA analysis to reduce the dimensionality of the dataset, and then utilised a k-nearest neighbours algorithm to classify the test set.\newline
 
-From Fig. \ref{fds-project-template:fig:ep_distplot}, we can see that higher Elo players have a very concentrated area of temptation where they will perform a capture, i.e. when the temptation is close to $0$. The drop-off after being relatively sharp, and turning to a near-zero chance for any move below $T(move)=-20$. On the other hand, both the medium and lower Elo classes have a much spread-out and shallower slope, which indicates that in lower Elos, the novelty of playing en-passant outweighs the potential repercussions of playing a bad move. However, all three Elo classes seem to follow a normal distribution, implying it would be possible to predict how a player at a certain ELO will play given an en-passant opportunity.\newline
+From Fig. \ref{fds-project-template:fig:ep_distplot}, we can see that higher Elo players have a very concentrated area of temptation where they will perform a capture, i.e. when the temptation is close to $0$. The drop-off after being relatively sharp, and turning to a near-zero chance for any move below $T(move)=-20$. On the other hand, both the medium and lower Elo classes have a much spread-out and shallower slope, which indicates that in lower Elos, the novelty of playing en-passant does outweigh the potential repercussions of playing a bad move. However, all three Elo classes seem to follow a normal distribution, implying it would be possible to predict how a player at a certain ELO will play given an en-passant opportunity.\newline
 
-On the other hand, from the K-NN Chart (Fig. \ref{fds-project-template:fig:knn}), the left and right sides are well defined, but the middle Elo class has a very small classifying area. This is likely due to there being a lot of overlap from all three categories in the section where most medium Elo games lie, making it difficult to accurately classify a data point inside of that region. From these two graphs, it is clear that although we can somewhat predict the chances of an en-passant move given the Elo of a player, the inverse is a lot harder to predict without a more accurate model and parameters of the players involved. \newline
+On the other hand, from the K-NN Chart (Fig. \ref{fds-project-template:fig:knn}), the left and right sides are somewhat defined, but the middle Elo class has a very erratic classifying area, with it being blended in with the other two classes as well. This is likely due to there being a lot of overlap from all three categories in the section where most medium Elo games lie, making it difficult to accurately classify a data point inside of that region from the parameters that we used. From these two graphs, it is clear that although we can somewhat predict the chances of an en-passant move given the Elo of a player, the inverse is not true and using only context surrounding an en-passant move is not nearly enough to predict someone's Elo without a much more accurate model and further parameters of the players involved. \newline
 
-We created a confusion matrix (Table \ref{tab:confusion_matrix}) detailing the numbers of correct and incorrect predictions of the k-NN model on the test set for each Elo class. 
-
+To further back this up, we created a confusion matrix (Table \ref{tab:confusion_matrix}) detailing the numbers of correct and incorrect predictions of the k-NN model on the test set for each Elo class. 
 \begin{figure*}[t]
   \centering
   \includegraphics[width=\textwidth]{report/images/knn_graph.png}
-  \caption{Each dot in the chart represents a unique player in the dataset, and their Elo is sorted into the corresponding category of Elo class. The algorithm is tuned with between 3 and 7 neighbours and picks the result with the highest accuracy.}
+  \caption{Each dot in the chart represents a unique player in the dataset, and their Elo is sorted into the corresponding category of Elo class. The algorithm is tuned with between 3 and 7 neighbours and picks the result with the highest accuracy, in this case 5.}
   \label{fds-project-template:fig:knn}
 \end{figure*}
 
-Values from the confusion matrix were used to calculate metrics to evaluate the model's predictive performance. These metrics were: accuracy ($0.3357$), precision ($0.3475$), recall ($0.3475$), and sample-weighted F1 score ($0.3347$). The accuracy is below $0.5$, thus demonstrating our model has poor predictive capabilities. The precision and recall scores were used in the calculation for the F1 score, which evaluates the model for precision (amount of correctly classified data points) and robustness (whether it misses a significant amount of data) \cite{MetricsToEvaluateYourML}. To account for the test set containing different proportions of each Elo class, we used the sample-weighted calculation for the F1 score. This produced an F1 score of $0.3347$ which shows a bad fit of the model to the data, implying Elo cannot be predicted from the model's hyperparameters. \newline
+Values from the confusion matrix were used to calculate metrics to evaluate the model's predictive performance. These metrics were: accuracy ($0.3412$), precision ($0.3991$), recall ($0.3412$), and sample-weighted F1 score ($0.3544$). The accuracy is below $0.5$, thus demonstrating our model has poor predictive capabilities. The precision and recall scores were used in the calculation for the F1 score, which evaluates the model for precision (amount of correctly classified data points) and robustness (whether it misses a significant amount of data) \cite{MetricsToEvaluateYourML}. To account for the test set containing different proportions of each Elo class, we used the sample-weighted calculation for the F1 score. This produced an F1 score of $0.3544$ which shows a bad fit of the model to the data, implying Elo cannot be accurately predicted from the model's hyperparameters. \newline
 
 We further produced an ROC [Lila do this and cite figure]
 
@@ -230,18 +229,18 @@ We further produced an ROC [Lila do this and cite figure]
 
 
 \paragraph{Summary of findings}
-This study's findings indicate that the amount of difference in Elo between two players affects the outcome of a chess game, for games played on the online chess website Chess.com. 
+This study's findings indicate that the amount of difference in Elo between two players affects the outcome of a chess game, for games played on the online chess website Chess.com.  \newline
 
 By focusing on the situational board state whenever an \textit{en passant} chess move was played, we developed a k-NN model to determine whether there was enough information from this context to predict the Elo of the player. However we
-found insufficient evidence that a player's skill level, measured through Elo, was predictable from the context of this one move.
+found insufficient evidence that a player's Elo was predictable from the context of this one move.
 
 
 
 
 \paragraph{Evaluation of own work: strengths and limitations}
-A caveat of using Stockfish is that since it is a live engine, without utilising significant processing power it will end up with slightly different results each time it runs. Although we have found that in most cases the data is similar, sometimes it generates a large variation in the graphs that will be shown in this study.
+A caveat of using Stockfish is that since it is a live engine, without utilising significant processing power it will end up with slightly different results each time it runs. Although we have found that in most cases the data is similar, sometimes it generates a large variation in the graphs that will be shown in this study.\newline
 
-
+Another limitation is that while the "quotient"  field measuring the probability of a player playing an en-passant move cannot be used backwards to predict the Elo of the player, the derivation of the value is taken from a rounding of the player's Elo. So this study is more of a proof of concept, as it cannot be viable to predict a person's Elo blind. A more viable option is to instead of grouping by similar Elo class, to group by individual players instead. However, in this dataset there is not a large enough sample to viably do this, as the mean number of games with a player is only $1.7370$, with a standard deviation of $4.0367$.
 
 \paragraph{Comparison with any other related work}
 E.g. ``Anscombe has also demonstrated that many patterns of data can
@@ -262,4 +261,4 @@ The model used to predict the "temptation" of a move is very simplistic and does
 \end{document}
 
 % LocalWords:  lrrrrrrr ment Macduff Kemnay Ruchill FDS mc th fds
-% LocalWords:  Anscombe dataset
+% LocalWords:  Anscombe dataset en-passant passant en
