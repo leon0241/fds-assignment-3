@@ -11,6 +11,7 @@ Put the `.csv` file into `.\data` for the program to work properly
 - `re` for regex string parsing
 - `pandas` for dataframes
 - `pandarallel` for multi-core dataframe processing
+- `pyarrow` for parsing pandas `.parquet` files
 - `chess` for PGN parsing
 - `seaborn` and `matplotlib` for data visualisation
 - `scikit-learn` for data processing and machine learning
