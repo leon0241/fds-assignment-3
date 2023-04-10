@@ -16,6 +16,16 @@ Put the `.csv` file into `.\data` for the program to work properly
 - `seaborn` and `matplotlib` for data visualisation
 - `scikit-learn` for data processing and machine learning
 
+## Main files
+- `assignment-3-Q1.ipynb`: Question 1
+- `assignment-3-Q2.ipynb`: Question 2
+- `report/report.tex`: Main LaTeX document
+
 ## Helper files
 - `data_cleaning.py`: imports the csv file and cleans the data
 - `stockfish_eval.py`: class with functions to evaluate a board state
+
+## Helper software
+Stockfish: A chess game engine for evaluating moves
+- `stockfish_14_linux`: Linux binary of Stockfish 14 (you might have to set chmod +x for it to work)
+- `stockfish_14_win_x64`: Windows binary of Stockfish 14
