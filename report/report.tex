@@ -195,7 +195,7 @@ To further back this up, we created a confusion matrix (Table \ref{tab:confusion
   \label{fds-project-template:fig:knn}
 \end{figure*}
 
-Values from the confusion matrix were used to calculate metrics to evaluate the model's predictive performance. These metrics were: accuracy ($0.3412$), precision ($0.3991$), recall ($0.3412$), and sample-weighted F1 score ($0.3544$). The accuracy is below $0.5$, thus demonstrating our model has poor predictive capabilities. The precision and recall scores were used in the calculation for the F1 score, which evaluates the model for precision (amount of correctly classified data points) and robustness (whether it misses a significant amount of data) \cite{MetricsToEvaluateYourML}. To account for the test set containing different proportions of each Elo class, we used the sample-weighted calculation for the F1 score. This produced an F1 score of $0.3544$ which shows a bad fit of the model to the data, implying Elo cannot be accurately predicted from the model's hyperparameters. \newline
+Values from the confusion matrix were used to calculate metrics to evaluate the model's predictive performance. These metrics were: accuracy ($0.3349$), precision ($0.4020$), recall ($0.3349$), and sample-weighted F1 score ($0.3518$). The accuracy is below $0.5$, thus demonstrating our model has poor predictive capabilities. The precision and recall scores were used in the calculation for the F1 score, which evaluates the model for precision (amount of correctly classified data points) and robustness (whether it misses a significant amount of data) \cite{MetricsToEvaluateYourML}. To account for the test set containing different proportions of each Elo class, we used the sample-weighted calculation for the F1 score. This produced an F1 score of $0.3518$ which shows a bad fit of the model to the data, implying Elo cannot be accurately predicted from the model's hyperparameters. \newline
 
 We further produced an ROC [Lila do this and cite figure]
 
@@ -207,9 +207,9 @@ We further produced an ROC [Lila do this and cite figure]
         \toprule
         \textbf{Location}&\textbf{Predict 1}&\textbf{Predict 2}&\textbf{Predict 3}\\
         \midrule
-        \textbf{Actual 1}&$10$&$ 95$&$5.3$\tabularnewline
-        \textbf{Actual 2}&$ 3$&$ 40$&$5.3$\tabularnewline
-        \textbf{Actual 3}&$ 0$&$ 10$&$6.3$\tabularnewline
+        \textbf{Actual 1}&$82$&$ 75$&$70$\tabularnewline
+        \textbf{Actual 2}&$17$&$ 35$&$39$\tabularnewline
+        \textbf{Actual 3}&$ 99$&$ 121$&$95$\tabularnewline
         \hline
     \end{tabular}
 \end{table}
@@ -240,7 +240,7 @@ found insufficient evidence that a player's Elo was predictable from the context
 \paragraph{Evaluation of own work: strengths and limitations}
 A caveat of using Stockfish is that since it is a live engine, without utilising significant processing power it will end up with slightly different results each time it runs. Although we have found that in most cases the data is similar, sometimes it generates a large variation in the graphs that will be shown in this study.\newline
 
-Another limitation is that while the "quotient"  field measuring the probability of a player playing an en-passant move cannot be used backwards to predict the Elo of the player, the derivation of the value is taken from a rounding of the player's Elo. So this study is more of a proof of concept, as it cannot be viable to predict a person's Elo blind. A more viable option is to instead of grouping by similar Elo class, to group by individual players instead. However, in this dataset there is not a large enough sample to viably do this, as the mean number of games with a player is only $1.7370$, with a standard deviation of $4.0367$.
+Another limitation is that while the "quotient"  field measuring the probability of a player playing an en-passant move cannot be used backwards to predict the Elo of the player, the derivation of the value is taken from a rounding of the player's Elo. So this study is more of a proof of concept, as it cannot be viable to predict a person's Elo blind. A more viable option is to instead of grouping by similar Elo class, to group by individual players instead. However, in this dataset there is not a large enough sample to viably do this, as the mean number of games per player is only $1.7370$, with a standard deviation of $4.0367$.
 
 \paragraph{Comparison with any other related work}
 E.g. ``Anscombe has also demonstrated that many patterns of data can
